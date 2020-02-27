@@ -1,5 +1,7 @@
 package com.posadskiy.currencyconverter;
 
+import com.posadskiy.currencyconverter.config.Config;
+import com.posadskiy.currencyconverter.enums.Currency;
 import com.posadskiy.currencyconverter.service.CurrencyConvertService;
 
 /**
@@ -13,16 +15,16 @@ import com.posadskiy.currencyconverter.service.CurrencyConvertService;
 public class CurrencyConverter {
 
 	/**
-	 * API Key for <url>currencyconverterapi.com</url>
+	 * Configuration class for conversion
 	 */
-	private String apiKey;
+	private Config config;
 
 	private CurrencyConvertService currencyConvertService = new CurrencyConvertService();
 
 	private CurrencyConverter() {};
 
-	public CurrencyConverter(String apiKey) {
-		this.apiKey = apiKey;
+	public CurrencyConverter(Config config) {
+		this.config = config;
 	}
 
 	/**
@@ -33,7 +35,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rate(Currency from, Currency to) {
-		return currencyConvertService.rate(this.apiKey, from, to);
+		return currencyConvertService.rate(this.config, from, to);
 	}
 
 	/**
@@ -43,7 +45,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromUsd(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.USD, to);
+		return currencyConvertService.rate(this.config, Currency.USD, to);
 	}
 
 	/**
@@ -52,7 +54,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromUsdToEuro() {
-		return currencyConvertService.rate(this.apiKey, Currency.USD, Currency.EUR);
+		return currencyConvertService.rate(this.config, Currency.USD, Currency.EUR);
 	}
 
 	/**
@@ -61,7 +63,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromEuroToUsd() {
-		return currencyConvertService.rate(this.apiKey, Currency.EUR, Currency.USD);
+		return currencyConvertService.rate(this.config, Currency.EUR, Currency.USD);
 	}
 
 	/**
@@ -71,7 +73,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToUsd(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.USD);
+		return currencyConvertService.rate(this.config, from, Currency.USD);
 	}
 
 	/**
@@ -81,7 +83,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromEuro(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.EUR, to);
+		return currencyConvertService.rate(this.config, Currency.EUR, to);
 	}
 
 	/**
@@ -91,7 +93,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToEuro(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.EUR);
+		return currencyConvertService.rate(this.config, from, Currency.EUR);
 	}
 
 	/**
@@ -101,7 +103,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromUah(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.UAH, to);
+		return currencyConvertService.rate(this.config, Currency.UAH, to);
 	}
 
 	/**
@@ -111,7 +113,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToUah(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.UAH);
+		return currencyConvertService.rate(this.config, from, Currency.UAH);
 	}
 
 	/**
@@ -121,7 +123,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromRub(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.RUB, to);
+		return currencyConvertService.rate(this.config, Currency.RUB, to);
 	}
 
 	/**
@@ -131,7 +133,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToRub(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.RUB);
+		return currencyConvertService.rate(this.config, from, Currency.RUB);
 	}
 
 	/**
@@ -141,7 +143,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromByn(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.BYN, to);
+		return currencyConvertService.rate(this.config, Currency.BYN, to);
 	}
 
 	/**
@@ -151,7 +153,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToByn(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.BYN);
+		return currencyConvertService.rate(this.config, from, Currency.BYN);
 	}
 
 	/**
@@ -161,7 +163,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToKwd(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.KWD);
+		return currencyConvertService.rate(this.config, from, Currency.KWD);
 	}
 
 	/**
@@ -171,7 +173,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromKuwaitiDinar(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.KWD, to);
+		return currencyConvertService.rate(this.config, Currency.KWD, to);
 	}
 
 	/**
@@ -181,7 +183,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToKuwaitiDinar(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.BHD);
+		return currencyConvertService.rate(this.config, from, Currency.BHD);
 	}
 
 	/**
@@ -191,7 +193,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromBahrainiDinar(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.BHD, to);
+		return currencyConvertService.rate(this.config, Currency.BHD, to);
 	}
 
 	/**
@@ -201,7 +203,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToOmanRial(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.OMR);
+		return currencyConvertService.rate(this.config, from, Currency.OMR);
 	}
 
 	/**
@@ -211,7 +213,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromOmanRial(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.OMR, to);
+		return currencyConvertService.rate(this.config, Currency.OMR, to);
 	}
 
 	/**
@@ -221,7 +223,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToJordanDinar(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.JOD);
+		return currencyConvertService.rate(this.config, from, Currency.JOD);
 	}
 
 	/**
@@ -231,7 +233,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromJordanDinar(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.JOD, to);
+		return currencyConvertService.rate(this.config, Currency.JOD, to);
 	}
 
 	/**
@@ -241,7 +243,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToBritishPoundSterling(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.GBP);
+		return currencyConvertService.rate(this.config, from, Currency.GBP);
 	}
 
 	/**
@@ -251,7 +253,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromBritishPoundSterling(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.GBP, to);
+		return currencyConvertService.rate(this.config, Currency.GBP, to);
 	}
 
 	/**
@@ -261,7 +263,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToCaymanIslandsDollar(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.KYD);
+		return currencyConvertService.rate(this.config, from, Currency.KYD);
 	}
 
 	/**
@@ -271,7 +273,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromCaymanIslandsDollar(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.KYD, to);
+		return currencyConvertService.rate(this.config, Currency.KYD, to);
 	}
 
 	/**
@@ -281,7 +283,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToSwissFranc(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.CHF);
+		return currencyConvertService.rate(this.config, from, Currency.CHF);
 	}
 
 	/**
@@ -291,7 +293,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromSwissFranc(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.CHF, to);
+		return currencyConvertService.rate(this.config, Currency.CHF, to);
 	}
 
 	/**
@@ -301,7 +303,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateToCanadianDollar(Currency from) {
-		return currencyConvertService.rate(this.apiKey, from, Currency.CAD);
+		return currencyConvertService.rate(this.config, from, Currency.CAD);
 	}
 
 	/**
@@ -311,7 +313,7 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rateFromCanadianDollar(Currency to) {
-		return currencyConvertService.rate(this.apiKey, Currency.CAD, to);
+		return currencyConvertService.rate(this.config, Currency.CAD, to);
 	}
 
 	/**
@@ -322,6 +324,6 @@ public class CurrencyConverter {
 	 * @return rate
 	 */
 	public Double rate(String from, String to) {
-		return currencyConvertService.rate(this.apiKey, Currency.valueOf(from), Currency.valueOf(to));
+		return currencyConvertService.rate(this.config, Currency.valueOf(from), Currency.valueOf(to));
 	}
 }

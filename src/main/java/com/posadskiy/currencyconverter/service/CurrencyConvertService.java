@@ -1,57 +1,43 @@
 package com.posadskiy.currencyconverter.service;
 
-
-import com.posadskiy.currencyconverter.Currency;
-
-import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.stream.Collectors;
+import com.posadskiy.currencyconverter.Messages;
+import com.posadskiy.currencyconverter.config.Config;
+import com.posadskiy.currencyconverter.enums.Currency;
+import com.posadskiy.currencyconverter.exception.CurrencyConverterException;
+import com.posadskiy.currencyconverter.source.CurrencyConverterApiSource;
+import com.posadskiy.currencyconverter.source.CurrencyLayerSource;
+import com.posadskiy.currencyconverter.source.OpenExchangeRatesSource;
 
 public class CurrencyConvertService {
-
-	public Double rate(String apiKey, Currency from, Currency to) {
-		String collected = getBufferReaderByUrl(apiKey, from, to);
-
-		String[] splitCurrencyInfo = collected.split(":");
-		if (splitCurrencyInfo.length != 2) {
-			throw new RuntimeException("Public API was changed");
-		}
-
-		return Double.parseDouble(splitCurrencyInfo[1].replace("}", ""));
-	}
-
-	private String getUrlString(String apiKey, Currency from, Currency to) {
-		return "https://free.currconv.com/api/v7/convert?q=" + from + "_" + to + "&compact=ultra&apiKey=" + apiKey;
-	}
-
-
-	private String getBufferReaderByUrl(String apiKey, Currency from, Currency to) {
-		try {
-			URL url = new URL(getUrlString(apiKey, from, to));
-			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json");
-
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+	public Double rate(Config config, Currency from, Currency to) {
+		if (config.getCurrencyConverterApiApiKey() != null) {
+			CurrencyConverterApiSource currencyConverterApiSource = new CurrencyConverterApiSource();
+			try {
+				return currencyConverterApiSource.rate(config.getCurrencyConverterApiApiKey(), from, to);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-			String currency = new BufferedReader(
-				new InputStreamReader(
-					conn.getInputStream()))
-				.lines()
-				.collect(Collectors.joining());
-
-			conn.disconnect();
-
-			return currency;
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
-		throw new RuntimeException("Get currency request not working. Please, try later");
+		if (config.getCurrencyLayerApiKey() != null) {
+			CurrencyLayerSource currencyLayerSource = new CurrencyLayerSource();
+			try {
+				return currencyLayerSource.rate(config.getOpenExchangeRatesApiKey(), from, to);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		if (config.getOpenExchangeRatesApiKey() != null) {
+			OpenExchangeRatesSource openExchangeRatesSource = new OpenExchangeRatesSource();
+			try {
+				return openExchangeRatesSource.rate(config.getOpenExchangeRatesApiKey(), from, to);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		throw new CurrencyConverterException(Messages.TRY_LATER);
 	}
+
 }

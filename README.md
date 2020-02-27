@@ -1,9 +1,9 @@
 <p align="center">
     <h2>Currency Converter</h2>
-Java library recieves current exchange rate
+Java library receives current exchange rate
 <li>165+ currencies</li>
 <li>No dependencies</li>
-<li>Only 3 small classes - Currencies Enum, Request Service and API</li>
+<li>Supports 3 sources - CurrencyConverterApi.Com, CurrencyLayer.Com, OpenExchangeRates.Com</li>
 </p>
 
 ## Documentation
@@ -15,30 +15,56 @@ Java library recieves current exchange rate
 <dependency>
   <groupId>com.posadskiy</groupId>
   <artifactId>currency-converter</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
 ##### Gradle/Grails
 
 ```xml
-compile 'com.posadskiy:currency-converter:1.0.0'
+compile 'com.posadskiy:currency-converter:1.1.0'
 ```
 
 ##### Scala SBT
 ```scala
-libraryDependencies += "com.posadskiy" % "currency-converter" % "1.0.0"
+libraryDependencies += "com.posadskiy" % "currency-converter" % "1.1.0"
 ```
 
-### Initialization
+### How to init service
 
 [How to get API Key?](#ApiKey)
 ```java
+/**
+ * Define your API keys
+ * Use at least one key, but we recommend define three:
+ * One or even two services can be off, but not three at the same time
+*/
+public static final String CURRENCY_CONVERTER_API_API_KEY = "YOUR API KEY FOR CurrencyConverterApi.Com";
+public static final String CURRENCY_LAYER = "YOUR API KEY FOR CurrencyLayer.Com";
+public static final String OPEN_EXCHANGE_RATES = "YOUR API KEY FOR OpenExchangeRates.Com";
+
 // Init converter with your API key
-CurrencyConverter converter = new CurrencyConverter(apiKey);
+CurrencyConverter converter = new CurrencyConverter(
+    ConfigBuilder()
+        .currencyConverterApiApiKey(CURRENCY_CONVERTER_API_API_KEY)
+        .currencyLayerApiKey(CURRENCY_LAYER)
+        .openExchangeRatesApiKey(OPEN_EXCHANGE_RATES)
+        .build()
+);
 ```
 
-### Working
+Sure, you are able to use only one service:
+```java
+public static final String OPEN_EXCHANGE_RATES = "YOUR API KEY FOR OpenExchangeRates.Com";
+
+CurrencyConverter converter = new CurrencyConverter(
+    ConfigBuilder()
+        .openExchangeRatesApiKey(OPEN_EXCHANGE_RATES)
+        .build()
+);
+```
+
+### How it works
 ```java
 // Get rate with Currency Enum
 Double gbrToChfRate = converter.rate(Currency.GBP, Currency.CHF);
@@ -53,9 +79,15 @@ Double usdToEuroRate = converter.rateFromUsdToEuro();
 Double usdToEuroRate = converter.rate("USD", "EUR");
 ```
 
-##### ApiKey
-Sing up on website [Currency Converter Api](https://currencyconverterapi.com) and get key for use this service.
-API key looks like *114ccb23bhhewr732sdc*
+#### ApiKey
+Sing up on websites you are going to use:
+ - [Currency Converter Api](https://currencyconverterapi.com)
+ - [Currency Layer](https://currencylayer.com/)
+ - [Open Exchange Rates](https://openexchangerates.org/)
+ 
+and get key for use this services.
+
+API key looks like symbolic string.
 
 ## License
 

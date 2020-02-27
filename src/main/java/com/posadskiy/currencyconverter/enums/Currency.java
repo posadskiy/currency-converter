@@ -1,4 +1,4 @@
-package com.posadskiy.currencyconverter;
+package com.posadskiy.currencyconverter.enums;
 
 public enum Currency {
 	AED,
