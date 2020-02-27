@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.posadskiy</groupId>
     <artifactId>currency-converter</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <packaging>jar</packaging>
     <name>Currency Converter</name>
     <description>Open Source library for converting currencies</description>
-    <url>https://github.com/posadskiy/cost-accounting</url>
+    <url>https://github.com/posadskiy/currency-converter</url>
     <licenses>
         <license>
             <name>MIT License</name>
@@ -16,10 +16,10 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:https://github.com/posadskiy/cost-accounting</connection>
-        <developerConnection>scm:git:https://github.com/posadskiy/cost-accounting</developerConnection>
+        <connection>scm:git:https://github.com/posadskiy/currency-converter</connection>
+        <developerConnection>scm:git:https://github.com/posadskiy/currency-converter</developerConnection>
         <tag>HEAD</tag>
-        <url>https://github.com/posadskiy/cost-accounting</url>
+        <url>https://github.com/posadskiy/currency-converter</url>
     </scm>
     <developers>
         <developer>
