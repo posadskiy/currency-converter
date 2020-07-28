@@ -15,19 +15,19 @@ Java library receives current exchange rate
 <dependency>
   <groupId>com.posadskiy</groupId>
   <artifactId>currency-converter</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
 </dependency>
 ```
 
 ##### Gradle/Grails
 
 ```xml
-compile 'com.posadskiy:currency-converter:1.1.1'
+compile 'com.posadskiy:currency-converter:1.1.2'
 ```
 
 ##### Scala SBT
 ```scala
-libraryDependencies += "com.posadskiy" % "currency-converter" % "1.1.1"
+libraryDependencies += "com.posadskiy" % "currency-converter" % "1.1.2"
 ```
 
 ### How to init service
@@ -45,7 +45,7 @@ public static final String OPEN_EXCHANGE_RATES = "YOUR API KEY FOR OpenExchangeR
 
 // Init converter with your API key
 CurrencyConverter converter = new CurrencyConverter(
-    ConfigBuilder()
+    new ConfigBuilder()
         .currencyConverterApiApiKey(CURRENCY_CONVERTER_API_API_KEY)
         .currencyLayerApiKey(CURRENCY_LAYER)
         .openExchangeRatesApiKey(OPEN_EXCHANGE_RATES)
@@ -58,7 +58,7 @@ Sure, you are able to use only one service:
 public static final String OPEN_EXCHANGE_RATES = "YOUR API KEY FOR OpenExchangeRates.Com";
 
 CurrencyConverter converter = new CurrencyConverter(
-    ConfigBuilder()
+    new ConfigBuilder()
         .openExchangeRatesApiKey(OPEN_EXCHANGE_RATES)
         .build()
 );

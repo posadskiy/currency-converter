@@ -22,7 +22,7 @@ public class CurrencyConvertService {
 		if (config.getCurrencyLayerApiKey() != null) {
 			CurrencyLayerSource currencyLayerSource = new CurrencyLayerSource();
 			try {
-				return currencyLayerSource.rate(config.getOpenExchangeRatesApiKey(), from, to);
+				return currencyLayerSource.rate(config.getCurrencyLayerApiKey(), from, to);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
