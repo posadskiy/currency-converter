@@ -11,27 +11,28 @@ import java.io.IOException;
  * OpenExchangeRates.Com service
  */
 public class OpenExchangeRatesSource implements ConverterSource {
+	public static final String SERVICE_NAME = "OpenExchangeRates.Com";
 	@Override
 	public Double rate(String apiKey, Currency from, Currency to) throws IOException {
 		String collected = NetworkUtils.getBufferReaderByUrl(getUrlString(apiKey, from, to), true);
 
 		final String[] splitCurrencyInfo = collected.split("rates\":");
 		if (splitCurrencyInfo.length != 2) {
-			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage("OpenExchangeRates.Com"));
+			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
 		}
 
 		final String[] split = splitCurrencyInfo[1].split(",");
 		if (split.length != 2) {
-			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage("OpenExchangeRates.Com"));
+			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
 		}
 
 		try {
-			final String fromRate = split[0].replaceAll(" ", "").replaceAll("\"", "").replace("{", "").split(":")[1];
-			final String toRate = split[1].replaceAll(" ", "").replaceAll("\"", "").replaceAll("}", "").split(":")[1];
+			final String toRate = split[0].replaceAll(" ", "").replaceAll("\"", "").replace("{", "").split(":")[1];
+			final String fromRate = split[1].replaceAll(" ", "").replaceAll("\"", "").replaceAll("}", "").split(":")[1];
 
 			return Double.parseDouble(toRate) / Double.parseDouble(fromRate);
 		} catch (Exception e) {
-			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage("OpenExchangeRates.Com"));
+			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
 		}
 	}
 

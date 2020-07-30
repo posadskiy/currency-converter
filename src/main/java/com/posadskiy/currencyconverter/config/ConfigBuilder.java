@@ -4,7 +4,7 @@ import com.posadskiy.currencyconverter.Messages;
 import com.posadskiy.currencyconverter.exception.CurrencyConverterException;
 
 public class ConfigBuilder {
-	private Config config;
+	private final Config config;
 
 	public ConfigBuilder() {
 		config = new Config();

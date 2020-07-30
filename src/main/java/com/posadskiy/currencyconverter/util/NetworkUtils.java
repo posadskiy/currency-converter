@@ -1,6 +1,7 @@
 package com.posadskiy.currencyconverter.util;
 
-import com.posadskiy.currencyconverter.enums.Currency;
+import com.posadskiy.currencyconverter.Messages;
+import com.posadskiy.currencyconverter.exception.CurrencyConverterException;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class NetworkUtils {
@@ -18,7 +20,9 @@ public class NetworkUtils {
 		conn.setRequestProperty("Accept", "application/json");
 
 		if (conn.getResponseCode() != 200) {
-			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			Scanner s = new Scanner(conn.getErrorStream()).useDelimiter("\\A");
+			String serviceNetworkErrorMessage = s.hasNext() ? s.next() : "";
+			throw new CurrencyConverterException(Messages.getServiceNetworkErrorMessage(serviceNetworkErrorMessage));
 		}
 
 		String currency = new BufferedReader(

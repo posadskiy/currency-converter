@@ -11,18 +11,20 @@ import java.io.IOException;
  * CurrencyLayer.Com service
  */
 public class CurrencyLayerSource implements ConverterSource {
+	public static final String SERVICE_NAME = "CurrencyLayer.Com";
+
 	@Override
 	public Double rate(String apiKey, Currency from, Currency to) throws IOException {
 		String collected = NetworkUtils.getBufferReaderByUrl(getUrlString(apiKey, from, to), false);
 
 		final String[] splitCurrencyInfo = collected.split("quotes\":");
 		if (splitCurrencyInfo.length != 2) {
-			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage("CurrencyLayer.Com"));
+			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
 		}
 
 		final String[] split = splitCurrencyInfo[1].split(",");
 		if (split.length != 2) {
-			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage("CurrencyLayer.Com"));
+			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
 		}
 
 		try {
@@ -31,7 +33,7 @@ public class CurrencyLayerSource implements ConverterSource {
 
 			return Double.parseDouble(toRate) / Double.parseDouble(fromRate);
 		} catch (Exception e) {
-			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage("CurrencyLayer.Com"));
+			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
 		}
 	}
 

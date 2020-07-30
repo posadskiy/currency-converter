@@ -7,4 +7,12 @@ public class Messages {
 	public static String getServiceUnavailableMessage(String serviceName) {
 		return "Public API " + serviceName + " was changed. Please, create ticket on github.com/posadskiy/currency-converter or send e-mail to admin@posadskiy.com";
 	}
+
+	public static String getServiceProblemMessage(String serviceName) {
+		return "Service " + serviceName + " has problem currently. Please, try again later. If problem still happens, create ticket on github.com/posadskiy/currency-converter or send e-mail to admin@posadskiy.com";
+	}
+	
+	public static String getServiceNetworkErrorMessage(String serviceResponse) {
+		return "Service unavailable. Response: " + serviceResponse;
+	}
 }

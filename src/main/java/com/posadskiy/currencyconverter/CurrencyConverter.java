@@ -19,7 +19,7 @@ public class CurrencyConverter {
 	 */
 	private Config config;
 
-	private CurrencyConvertService currencyConvertService = new CurrencyConvertService();
+	private final CurrencyConvertService currencyConvertService = new CurrencyConvertService();
 
 	private CurrencyConverter() {};
 
