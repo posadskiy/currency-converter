@@ -89,6 +89,19 @@ and get key for use this services.
 
 API key looks like symbolic string.
 
+## Android
+The working process for Android is different from the usual Java application.
+Network requests from the main tread are prohibited for Android, so a possible way to call Currency Converter library is by creating AsyncTask wrapper.
+See [Examples](https://github.com/posadskiy/currency-converter/tree/master/examples/android).
+
+Also, it should be noted, Android application should have permissions to interaction with Network.
+Add to AndroidManifest.xml:
+ ```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+```
+
+[AsyncTask in Android](https://developer.android.com/reference/android/os/AsyncTask)
+
 ## License
 
 Currency Converter is available under the [MIT license](https://opensource.org/licenses/MIT).
