@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 public class CurrencyConvertService {
 	static Logger log = Logger.getLogger(CurrencyConvertService.class.getName());
 	public Double rate(Config config, Currency from, Currency to) {
+		if (from == to) return 1.0;
+
 		if (config.getCurrencyConverterApiApiKey() != null) {
 			CurrencyConverterApiSource currencyConverterApiSource = new CurrencyConverterApiSource();
 			try {
