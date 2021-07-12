@@ -15,19 +15,19 @@ Java library receives current exchange rate
 <dependency>
   <groupId>com.posadskiy</groupId>
   <artifactId>currency-converter</artifactId>
-  <version>1.1.4</version>
+  <version>1.1.5</version>
 </dependency>
 ```
 
 ##### Gradle/Grails
 
 ```xml
-compile 'com.posadskiy:currency-converter:1.1.4'
+compile 'com.posadskiy:currency-converter:1.1.5'
 ```
 
 ##### Scala SBT
 ```scala
-libraryDependencies += "com.posadskiy" % "currency-converter" % "1.1.4"
+libraryDependencies += "com.posadskiy" % "currency-converter" % "1.1.5"
 ```
 
 ### How to init service

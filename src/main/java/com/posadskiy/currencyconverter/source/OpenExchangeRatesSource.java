@@ -6,6 +6,8 @@ import com.posadskiy.currencyconverter.exception.CurrencyConverterException;
 import com.posadskiy.currencyconverter.util.NetworkUtils;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * OpenExchangeRates.Com service
@@ -26,11 +28,15 @@ public class OpenExchangeRatesSource implements ConverterSource {
 			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
 		}
 
+		Map<String, Double> currencyRates = new HashMap<>();
 		try {
-			final String toRate = split[0].replaceAll(" ", "").replaceAll("\"", "").replace("{", "").split(":")[1];
-			final String fromRate = split[1].replaceAll(" ", "").replaceAll("\"", "").replaceAll("}", "").split(":")[1];
+			String[] firstCurrencyRate = split[0].replaceAll(" ", "").replaceAll("\"", "").replace("{", "").split(":");
+			String[] secondCurrencyRate = split[1].replaceAll(" ", "").replaceAll("\"", "").replaceAll("}", "").split(":");
 
-			return Double.parseDouble(toRate) / Double.parseDouble(fromRate);
+			currencyRates.put(firstCurrencyRate[0], Double.parseDouble(firstCurrencyRate[1]));
+			currencyRates.put(secondCurrencyRate[0], Double.parseDouble(secondCurrencyRate[1]));
+
+			return currencyRates.get(to.name()) / currencyRates.get(from.name());
 		} catch (Exception e) {
 			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
 		}
