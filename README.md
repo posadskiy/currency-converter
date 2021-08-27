@@ -15,19 +15,19 @@ Java library receives current exchange rate
 <dependency>
   <groupId>com.posadskiy</groupId>
   <artifactId>currency-converter</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
 </dependency>
 ```
 
 ##### Gradle/Grails
 
 ```xml
-compile 'com.posadskiy:currency-converter:1.1.5'
+compile 'com.posadskiy:currency-converter:1.1.6'
 ```
 
 ##### Scala SBT
 ```scala
-libraryDependencies += "com.posadskiy" % "currency-converter" % "1.1.5"
+libraryDependencies += "com.posadskiy" % "currency-converter" % "1.1.6"
 ```
 
 ### How to init service
@@ -53,7 +53,7 @@ CurrencyConverter converter = new CurrencyConverter(
 );
 ```
 
-Sure, you are able to use only one service:
+Only one service using (recommended using at least two, it helps when one is unavailable)
 ```java
 public static final String OPEN_EXCHANGE_RATES = "YOUR API KEY FOR OpenExchangeRates.Com";
 
@@ -80,7 +80,7 @@ Double usdToEuroRate = converter.rate("USD", "EUR");
 ```
 
 #### ApiKey
-Sing up on websites you are going to use:
+Sign up on websites you are going to use:
  - [Currency Converter Api](https://currencyconverterapi.com)
  - [Currency Layer](https://currencylayer.com/)
  - [Open Exchange Rates](https://openexchangerates.org/)
