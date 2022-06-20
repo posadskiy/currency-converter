@@ -3,7 +3,12 @@
 Java library receives current exchange rate
 <li>165+ currencies</li>
 <li>No dependencies</li>
-<li>Supports 3 sources - CurrencyConverterApi.Com, CurrencyLayer.Com, OpenExchangeRates.Com</li>
+
+### Supported sources
+* [CurrencyConverterApi](https://www.currencyconverterapi.com/)
+* [CurrencyLayer](https://currencylayer.com/)
+* [OpenExchangeRates](https://openexchangerates.org/)
+* [Fixer](https://fixer.io/)
 </p>
 
 ## Documentation
@@ -84,6 +89,7 @@ Sign up on websites you are going to use:
  - [Currency Converter Api](https://currencyconverterapi.com)
  - [Currency Layer](https://currencylayer.com/)
  - [Open Exchange Rates](https://openexchangerates.org/)
+ - [Fixer](https://fixer.io/)
  
 and get key for use this services.
 
