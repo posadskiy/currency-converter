@@ -18,6 +18,8 @@ public class NetworkUtils {
 		HttpURLConnection conn = isHttps ? (HttpsURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		conn.setRequestProperty("Accept", "application/json");
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+        conn.setRequestProperty("Cache-Control", "no-cache");
 
 		if (conn.getResponseCode() != 200) {
 			Scanner s = new Scanner(conn.getErrorStream()).useDelimiter("\\A");
