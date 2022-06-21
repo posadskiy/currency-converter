@@ -28,8 +28,24 @@ public class ConfigBuilder {
 		return this;
 	}
 
+	public ConfigBuilder fixerApiKey(String apiKey) {
+		config.setFixerApiKey(apiKey);
+
+		return this;
+	}
+
+	public ConfigBuilder currencyFreaksApiKey(String apiKey) {
+		config.setCurrencyFreaksApiKey(apiKey);
+
+		return this;
+	}
+
 	public Config build() {
-		if (config.getCurrencyConverterApiApiKey() == null && config.getCurrencyLayerApiKey() == null && config.getOpenExchangeRatesApiKey() == null) {
+		if (config.getCurrencyConverterApiApiKey() == null 
+            && config.getCurrencyLayerApiKey() == null 
+            && config.getOpenExchangeRatesApiKey() == null
+            && config.getFixerApiKey() == null
+            && config.getCurrencyFreaksApiKey() == null) {
 			throw new CurrencyConverterException(Messages.FILL_API_KEY);
 		}
 

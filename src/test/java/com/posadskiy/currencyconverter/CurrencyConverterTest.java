@@ -11,6 +11,8 @@ public class CurrencyConverterTest {
 	public static final String CURRENCY_CONVERTER_API_API_KEY = "YOUR_API_KEY";
 	public static final String CURRENCY_LAYER_API_KEY = "YOUR_API_KEY";
 	public static final String OPEN_EXCHANGE_RATES_API_KEY = "YOUR_API_KEY";
+	public static final String FIXER_API_KEY = "YOUR_API_KEY";
+	public static final String CURRENCY_FREAKS_API_KEY = "YOUR_API_KEY";
 	public static final double ALLOWED_RATE_DEVIATION_PERCENT = 5;
 	public static final Currency FROM_CURRENCY = Currency.RUB;
 	public static final Currency TO_CURRENCY = Currency.BYN;
@@ -77,12 +79,25 @@ public class CurrencyConverterTest {
 		);
 		final Double openExchangeRatesRate = openExchangeRates.rate(FROM_CURRENCY, TO_CURRENCY);
 
-		assertThat(currencyConverterApiRate).isCloseTo(currencyLayerRate, Percentage.withPercentage(ALLOWED_RATE_DEVIATION_PERCENT));
-		assertThat(openExchangeRatesRate).isCloseTo(currencyLayerRate, Percentage.withPercentage(ALLOWED_RATE_DEVIATION_PERCENT));
-	}
+		CurrencyConverter fixer = new CurrencyConverter(
+			new ConfigBuilder()
+				.fixerApiKey(FIXER_API_KEY)
+				.build()
+		);
+		final Double fixerRate = fixer.rate(FROM_CURRENCY, TO_CURRENCY);
 
-	@Test
-	public void rateFromUsdToEuro() {
+		CurrencyConverter currencyFreaks = new CurrencyConverter(
+			new ConfigBuilder()
+				.currencyFreaksApiKey(CURRENCY_FREAKS_API_KEY)
+				.build()
+		);
+		final Double currencyFreaksRate = currencyFreaks.rate(FROM_CURRENCY, TO_CURRENCY);
+
+		assertThat(openExchangeRatesRate).isCloseTo(openExchangeRatesRate, Percentage.withPercentage(ALLOWED_RATE_DEVIATION_PERCENT));
+		assertThat(openExchangeRatesRate).isCloseTo(currencyConverterApiRate, Percentage.withPercentage(ALLOWED_RATE_DEVIATION_PERCENT));
+		assertThat(openExchangeRatesRate).isCloseTo(currencyLayerRate, Percentage.withPercentage(ALLOWED_RATE_DEVIATION_PERCENT));
+		assertThat(openExchangeRatesRate).isCloseTo(fixerRate, Percentage.withPercentage(ALLOWED_RATE_DEVIATION_PERCENT));
+		assertThat(openExchangeRatesRate).isCloseTo(currencyFreaksRate, Percentage.withPercentage(ALLOWED_RATE_DEVIATION_PERCENT));
 	}
 
 }

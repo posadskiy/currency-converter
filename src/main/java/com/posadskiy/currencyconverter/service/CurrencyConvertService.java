@@ -4,9 +4,7 @@ import com.posadskiy.currencyconverter.Messages;
 import com.posadskiy.currencyconverter.config.Config;
 import com.posadskiy.currencyconverter.enums.Currency;
 import com.posadskiy.currencyconverter.exception.CurrencyConverterException;
-import com.posadskiy.currencyconverter.source.CurrencyConverterApiSource;
-import com.posadskiy.currencyconverter.source.CurrencyLayerSource;
-import com.posadskiy.currencyconverter.source.OpenExchangeRatesSource;
+import com.posadskiy.currencyconverter.source.*;
 
 import java.util.logging.Logger;
 
@@ -47,6 +45,30 @@ public class CurrencyConvertService {
 				e.printStackTrace();
 			} catch (Exception e) {
 				log.warning(Messages.getServiceProblemMessage(OpenExchangeRatesSource.SERVICE_NAME));
+				e.printStackTrace();
+			}
+		}
+
+		if (config.getFixerApiKey() != null) {
+			FixerSource fixerSource = new FixerSource();
+			try {
+				return fixerSource.rate(config.getFixerApiKey(), from, to);
+			} catch (CurrencyConverterException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				log.warning(Messages.getServiceProblemMessage(FixerSource.SERVICE_NAME));
+				e.printStackTrace();
+			}
+		}
+
+		if (config.getCurrencyFreaksApiKey() != null) {
+			CurrencyFreaksSource currencyFreaksSource = new CurrencyFreaksSource();
+			try {
+				return currencyFreaksSource.rate(config.getCurrencyFreaksApiKey(), from, to);
+			} catch (CurrencyConverterException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				log.warning(Messages.getServiceProblemMessage(CurrencyFreaksSource.SERVICE_NAME));
 				e.printStackTrace();
 			}
 		}
