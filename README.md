@@ -1,8 +1,8 @@
-<p align="center">
-    <h2>Currency Converter</h2>
+##Currency Converter
+
 Java library receives current exchange rate
-<li>165+ currencies</li>
-<li>No dependencies</li>
+* 165+ currencies
+* No dependencies
 
 ### Supported sources
 * [CurrencyConverterApi](https://www.currencyconverterapi.com/)
@@ -10,7 +10,6 @@ Java library receives current exchange rate
 * [OpenExchangeRates](https://openexchangerates.org/)
 * [Fixer](https://fixer.io/)
 * [CurrencyFreaks](https://currencyfreaks.com/)
-</p>
 
 ## Documentation
 
