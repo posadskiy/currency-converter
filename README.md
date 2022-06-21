@@ -9,6 +9,7 @@ Java library receives current exchange rate
 * [CurrencyLayer](https://currencylayer.com/)
 * [OpenExchangeRates](https://openexchangerates.org/)
 * [Fixer](https://fixer.io/)
+* [CurrencyFreaks](https://currencyfreaks.com/)
 </p>
 
 ## Documentation
@@ -20,19 +21,19 @@ Java library receives current exchange rate
 <dependency>
   <groupId>com.posadskiy</groupId>
   <artifactId>currency-converter</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 ```
 
 ##### Gradle/Grails
 
 ```xml
-compile 'com.posadskiy:currency-converter:1.2.0'
+compile 'com.posadskiy:currency-converter:1.3.0'
 ```
 
 ##### Scala SBT
 ```scala
-libraryDependencies += "com.posadskiy" % "currency-converter" % "1.2.0"
+libraryDependencies += "com.posadskiy" % "currency-converter" % "1.3.0"
 ```
 
 ### How to init service
@@ -90,6 +91,7 @@ Sign up on websites you are going to use:
  - [Currency Layer](https://currencylayer.com/)
  - [Open Exchange Rates](https://openexchangerates.org/)
  - [Fixer](https://fixer.io/)
+ - [CurrencyFreaks](https://currencyfreaks.com/)
  
 and get key for use this services.
 
