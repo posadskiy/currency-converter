@@ -1,4 +1,4 @@
-##Currency Converter
+## Currency Converter
 
 Java library receives current exchange rate
 * 165+ currencies
