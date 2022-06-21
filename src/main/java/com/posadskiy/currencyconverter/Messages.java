@@ -15,4 +15,8 @@ public class Messages {
 	public static String getServiceNetworkErrorMessage(String serviceResponse) {
 		return "Service unavailable. Response: " + serviceResponse;
 	}
+    
+    public static String getPropertyLoadErrorMessage(String property) {
+        return "Property " + property + " loading error";
+    }
 }
