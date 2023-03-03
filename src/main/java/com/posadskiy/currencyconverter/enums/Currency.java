@@ -1,5 +1,8 @@
 package com.posadskiy.currencyconverter.enums;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 public enum Currency {
 	AED,
 	AFN,
@@ -166,5 +169,11 @@ public enum Currency {
 	ZAR,
 	ZMK,
 	ZMW,
-	ZWL
+	ZWL;
+
+    public static Optional<Currency> findByCode(String code) {
+        return Arrays.stream(values())
+            .filter(month -> month.name().equals(code))
+            .findFirst();
+    }
 }
