@@ -112,7 +112,3 @@ Add to AndroidManifest.xml:
 ## License
 
 Currency Converter is available under the [MIT license](https://opensource.org/licenses/MIT).
-
-## Powered by
-
-![Intellij IDEA](view-dependencies/intellij-idea.png)
