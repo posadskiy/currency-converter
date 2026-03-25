@@ -5,7 +5,9 @@ import com.posadskiy.currencyconverter.enums.Currency;
 import com.posadskiy.currencyconverter.enums.Source;
 import com.posadskiy.currencyconverter.util.PropertiesLoader;
 import org.assertj.core.data.Percentage;
-import org.junit.Test;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,8 +22,17 @@ public class CurrencyConverterTest {
     public static final Currency FROM_CURRENCY = Currency.RUB;
     public static final Currency TO_CURRENCY = Currency.BYN;
 
+    private static void requireConfigured(String apiKey) {
+        Assumptions.assumeTrue(
+            TestConfig.runExternalTests() && TestConfig.isConfigured(apiKey),
+            "Skipping external integration tests. Set RUN_EXTERNAL_TESTS=true and provide real API keys."
+        );
+    }
+
     @Test
+    @Disabled("CurrencyConverterApi provider is temporarily disabled (free tier not available).")
     public void rate_currencyConverterApi_working() {
+        requireConfigured(CURRENCY_CONVERTER_API_API_KEY);
         CurrencyConverter currencyConverter = new CurrencyConverter(
             new ConfigBuilder()
                 .currencyConverterApiApiKey(CURRENCY_CONVERTER_API_API_KEY)
@@ -35,6 +46,7 @@ public class CurrencyConverterTest {
 
     @Test
     public void rate_currencyLayerApi_working() {
+        requireConfigured(CURRENCY_LAYER_API_KEY);
         CurrencyConverter currencyConverter = new CurrencyConverter(
             new ConfigBuilder()
                 .currencyLayerApiKey(CURRENCY_LAYER_API_KEY)
@@ -48,6 +60,7 @@ public class CurrencyConverterTest {
 
     @Test
     public void rate_openExchangeRates_working() {
+        requireConfigured(OPEN_EXCHANGE_RATES_API_KEY);
         CurrencyConverter currencyConverter = new CurrencyConverter(
             new ConfigBuilder()
                 .openExchangeRatesApiKey(OPEN_EXCHANGE_RATES_API_KEY)
@@ -61,6 +74,7 @@ public class CurrencyConverterTest {
 
     @Test
     public void rate_fixer_working() {
+        requireConfigured(FIXER_API_KEY);
         CurrencyConverter currencyConverter = new CurrencyConverter(
             new ConfigBuilder()
                 .fixerApiKey(FIXER_API_KEY)
@@ -74,6 +88,7 @@ public class CurrencyConverterTest {
 
     @Test
     public void rate_currencyFreaks_working() {
+        requireConfigured(CURRENCY_FREAKS_API_KEY);
         CurrencyConverter currencyConverter = new CurrencyConverter(
             new ConfigBuilder()
                 .currencyFreaksApiKey(CURRENCY_FREAKS_API_KEY)
@@ -87,12 +102,10 @@ public class CurrencyConverterTest {
 
     @Test
     public void rate_allServices_resultsAreClose() {
-        CurrencyConverter currencyConverterApi = new CurrencyConverter(
-            new ConfigBuilder()
-                .currencyConverterApiApiKey(CURRENCY_CONVERTER_API_API_KEY)
-                .build()
-        );
-        final Double currencyConverterApiRate = currencyConverterApi.rate(FROM_CURRENCY, TO_CURRENCY);
+        requireConfigured(CURRENCY_LAYER_API_KEY);
+        requireConfigured(OPEN_EXCHANGE_RATES_API_KEY);
+        requireConfigured(FIXER_API_KEY);
+        requireConfigured(CURRENCY_FREAKS_API_KEY);
 
         CurrencyConverter currencyLayer = new CurrencyConverter(
             new ConfigBuilder()
@@ -122,8 +135,6 @@ public class CurrencyConverterTest {
         );
         final Double currencyFreaksRate = currencyFreaks.rate(FROM_CURRENCY, TO_CURRENCY);
 
-        assertThat(openExchangeRatesRate).isCloseTo(openExchangeRatesRate, Percentage.withPercentage(ALLOWED_RATE_DEVIATION_PERCENT));
-        assertThat(openExchangeRatesRate).isCloseTo(currencyConverterApiRate, Percentage.withPercentage(ALLOWED_RATE_DEVIATION_PERCENT));
         assertThat(openExchangeRatesRate).isCloseTo(currencyLayerRate, Percentage.withPercentage(ALLOWED_RATE_DEVIATION_PERCENT));
         assertThat(openExchangeRatesRate).isCloseTo(fixerRate, Percentage.withPercentage(ALLOWED_RATE_DEVIATION_PERCENT));
         assertThat(openExchangeRatesRate).isCloseTo(currencyFreaksRate, Percentage.withPercentage(ALLOWED_RATE_DEVIATION_PERCENT));

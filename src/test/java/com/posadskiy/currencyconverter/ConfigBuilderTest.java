@@ -3,9 +3,11 @@ package com.posadskiy.currencyconverter;
 import com.posadskiy.currencyconverter.config.Config;
 import com.posadskiy.currencyconverter.config.ConfigBuilder;
 import com.posadskiy.currencyconverter.exception.CurrencyConverterException;
-import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ConfigBuilderTest {
     public static final String CURRENCY_CONVERTER_API_API_KEY = "CURRENCY_CONVERTER_API";
@@ -14,10 +16,9 @@ public class ConfigBuilderTest {
     public static final String FIXER = "FIXER";
     public static final String CURRENCY_FREAKS = "CURRENCY_FREAKS";
 
-    @Test(expected = CurrencyConverterException.class)
+    @Test
     public void checkBuilderWithoutFilling() {
-        new ConfigBuilder()
-            .build();
+        assertThrows(CurrencyConverterException.class, () -> new ConfigBuilder().build());
     }
 
     @Test
@@ -37,4 +38,22 @@ public class ConfigBuilderTest {
         assertEquals(CURRENCY_FREAKS, config.getCurrencyFreaksApiKey());
     }
 
+    @Test
+    public void checkCacheTtlSeconds() {
+        final Config config = new ConfigBuilder()
+            .currencyLayerApiKey(CURRENCY_LAYER)
+            .cacheTtlSeconds(120)
+            .build();
+
+        assertEquals(120, config.getCacheTtlSeconds());
+    }
+
+    @Test
+    public void checkCacheTtlSeconds_defaultsToZero() {
+        final Config config = new ConfigBuilder()
+            .currencyLayerApiKey(CURRENCY_LAYER)
+            .build();
+
+        assertEquals(0, config.getCacheTtlSeconds());
+    }
 }
