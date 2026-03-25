@@ -173,7 +173,7 @@ public enum Currency {
 
     public static Optional<Currency> findByCode(String code) {
         return Arrays.stream(values())
-            .filter(month -> month.name().equals(code))
+            .filter(currency -> currency.name().equals(code))
             .findFirst();
     }
 }
