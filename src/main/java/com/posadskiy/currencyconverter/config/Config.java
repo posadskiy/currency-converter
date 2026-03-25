@@ -1,49 +1,59 @@
 package com.posadskiy.currencyconverter.config;
 
+/**
+ * Immutable configuration holding API keys and cache settings.
+ * Use {@link ConfigBuilder} to construct instances.
+ */
 public class Config {
-	private String currencyConverterApiApiKey;
-	private String currencyLayerApiKey;
-	private String openExchangeRatesApiKey;
-	private String fixerApiKey;
-	private String currencyFreaksApiKey;
 
-	public String getCurrencyConverterApiApiKey() {
-		return currencyConverterApiApiKey;
-	}
+    private final String currencyConverterApiApiKey;
+    private final String currencyLayerApiKey;
+    private final String openExchangeRatesApiKey;
+    private final String fixerApiKey;
+    private final String currencyFreaksApiKey;
+    private final int cacheTtlSeconds;
 
-	public void setCurrencyConverterApiApiKey(String currencyConverterApiApiKey) {
-		this.currencyConverterApiApiKey = currencyConverterApiApiKey;
-	}
+    /** Creates an empty configuration with no API keys and caching disabled. */
+    public Config() {
+        this(null, null, null, null, null, 0);
+    }
 
-	public String getCurrencyLayerApiKey() {
-		return currencyLayerApiKey;
-	}
+    Config(String currencyConverterApiApiKey, String currencyLayerApiKey,
+           String openExchangeRatesApiKey, String fixerApiKey,
+           String currencyFreaksApiKey, int cacheTtlSeconds) {
+        this.currencyConverterApiApiKey = currencyConverterApiApiKey;
+        this.currencyLayerApiKey = currencyLayerApiKey;
+        this.openExchangeRatesApiKey = openExchangeRatesApiKey;
+        this.fixerApiKey = fixerApiKey;
+        this.currencyFreaksApiKey = currencyFreaksApiKey;
+        this.cacheTtlSeconds = cacheTtlSeconds;
+    }
 
-	public void setCurrencyLayerApiKey(String currencyLayerApiKey) {
-		this.currencyLayerApiKey = currencyLayerApiKey;
-	}
+    public String getCurrencyConverterApiApiKey() {
+        return currencyConverterApiApiKey;
+    }
 
-	public String getOpenExchangeRatesApiKey() {
-		return openExchangeRatesApiKey;
-	}
+    public String getCurrencyLayerApiKey() {
+        return currencyLayerApiKey;
+    }
 
-	public void setOpenExchangeRatesApiKey(String openExchangeRatesApiKey) {
-		this.openExchangeRatesApiKey = openExchangeRatesApiKey;
-	}
+    public String getOpenExchangeRatesApiKey() {
+        return openExchangeRatesApiKey;
+    }
 
     public String getFixerApiKey() {
         return fixerApiKey;
-    }
-
-    public void setFixerApiKey(String fixerApiKey) {
-        this.fixerApiKey = fixerApiKey;
     }
 
     public String getCurrencyFreaksApiKey() {
         return currencyFreaksApiKey;
     }
 
-    public void setCurrencyFreaksApiKey(String currencyFreaksApiKey) {
-        this.currencyFreaksApiKey = currencyFreaksApiKey;
+    /**
+     * Returns the rate-cache time-to-live in seconds.
+     * {@code 0} (default) means caching is disabled.
+     */
+    public int getCacheTtlSeconds() {
+        return cacheTtlSeconds;
     }
 }

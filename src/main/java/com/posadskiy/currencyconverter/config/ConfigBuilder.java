@@ -4,51 +4,66 @@ import com.posadskiy.currencyconverter.Messages;
 import com.posadskiy.currencyconverter.exception.CurrencyConverterException;
 
 public class ConfigBuilder {
-	private final Config config;
 
-	public ConfigBuilder() {
-		config = new Config();
-	}
+    private String currencyConverterApiApiKey;
+    private String currencyLayerApiKey;
+    private String openExchangeRatesApiKey;
+    private String fixerApiKey;
+    private String currencyFreaksApiKey;
+    private int cacheTtlSeconds;
 
-	public ConfigBuilder currencyConverterApiApiKey(String apiKey) {
-		config.setCurrencyConverterApiApiKey(apiKey);
+    public ConfigBuilder currencyConverterApiApiKey(String apiKey) {
+        this.currencyConverterApiApiKey = apiKey;
+        return this;
+    }
 
-		return this;
-	}
+    public ConfigBuilder currencyLayerApiKey(String apiKey) {
+        this.currencyLayerApiKey = apiKey;
+        return this;
+    }
 
-	public ConfigBuilder currencyLayerApiKey(String apiKey) {
-		config.setCurrencyLayerApiKey(apiKey);
+    public ConfigBuilder openExchangeRatesApiKey(String apiKey) {
+        this.openExchangeRatesApiKey = apiKey;
+        return this;
+    }
 
-		return this;
-	}
+    public ConfigBuilder fixerApiKey(String apiKey) {
+        this.fixerApiKey = apiKey;
+        return this;
+    }
 
-	public ConfigBuilder openExchangeRatesApiKey(String apiKey) {
-		config.setOpenExchangeRatesApiKey(apiKey);
+    public ConfigBuilder currencyFreaksApiKey(String apiKey) {
+        this.currencyFreaksApiKey = apiKey;
+        return this;
+    }
 
-		return this;
-	}
+    /**
+     * Enables in-memory rate caching with the given TTL.
+     * Set to {@code 0} (default) to disable caching.
+     *
+     * @param seconds time-to-live for cached exchange rates
+     */
+    public ConfigBuilder cacheTtlSeconds(int seconds) {
+        this.cacheTtlSeconds = seconds;
+        return this;
+    }
 
-	public ConfigBuilder fixerApiKey(String apiKey) {
-		config.setFixerApiKey(apiKey);
+    public Config build() {
+        if (currencyConverterApiApiKey == null
+            && currencyLayerApiKey == null
+            && openExchangeRatesApiKey == null
+            && fixerApiKey == null
+            && currencyFreaksApiKey == null) {
+            throw new CurrencyConverterException(Messages.FILL_API_KEY);
+        }
 
-		return this;
-	}
-
-	public ConfigBuilder currencyFreaksApiKey(String apiKey) {
-		config.setCurrencyFreaksApiKey(apiKey);
-
-		return this;
-	}
-
-	public Config build() {
-		if (config.getCurrencyConverterApiApiKey() == null 
-            && config.getCurrencyLayerApiKey() == null 
-            && config.getOpenExchangeRatesApiKey() == null
-            && config.getFixerApiKey() == null
-            && config.getCurrencyFreaksApiKey() == null) {
-			throw new CurrencyConverterException(Messages.FILL_API_KEY);
-		}
-
-		return config;
-	}
+        return new Config(
+            currencyConverterApiApiKey,
+            currencyLayerApiKey,
+            openExchangeRatesApiKey,
+            fixerApiKey,
+            currencyFreaksApiKey,
+            cacheTtlSeconds
+        );
+    }
 }
