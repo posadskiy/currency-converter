@@ -3,47 +3,46 @@ package com.posadskiy.currencyconverter.source;
 import com.posadskiy.currencyconverter.Messages;
 import com.posadskiy.currencyconverter.enums.Currency;
 import com.posadskiy.currencyconverter.exception.CurrencyConverterException;
+import com.posadskiy.currencyconverter.util.JsonHelper;
 import com.posadskiy.currencyconverter.util.NetworkUtils;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * OpenExchangeRates.Com service
  */
 public class OpenExchangeRatesSource implements ConverterSource {
-	public static final String SERVICE_NAME = "OpenExchangeRates.Com";
-	@Override
-	public Double rate(String apiKey, Currency from, Currency to) throws IOException {
-		String collected = NetworkUtils.getBufferReaderByUrl(getUrlString(apiKey, from, to), true);
+    public static final String SERVICE_NAME = "OpenExchangeRates.Com";
+    public static final String DEFAULT_BASE_URL = "https://openexchangerates.org";
 
-		final String[] splitCurrencyInfo = collected.split("rates\":");
-		if (splitCurrencyInfo.length != 2) {
-			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
-		}
+    private final String baseUrl;
 
-		final String[] split = splitCurrencyInfo[1].split(",");
-		if (split.length != 2) {
-			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
-		}
+    public OpenExchangeRatesSource() {
+        this(DEFAULT_BASE_URL);
+    }
 
-		Map<String, Double> currencyRates = new HashMap<>();
-		try {
-			String[] firstCurrencyRate = split[0].replaceAll(" ", "").replaceAll("\"", "").replace("{", "").split(":");
-			String[] secondCurrencyRate = split[1].replaceAll(" ", "").replaceAll("\"", "").replaceAll("}", "").split(":");
+    public OpenExchangeRatesSource(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
 
-			currencyRates.put(firstCurrencyRate[0], Double.parseDouble(firstCurrencyRate[1]));
-			currencyRates.put(secondCurrencyRate[0], Double.parseDouble(secondCurrencyRate[1]));
+    @Override
+    public Double rate(String apiKey, Currency from, Currency to) throws IOException {
+        String url = getUrlString(apiKey, from, to);
+        String collected = NetworkUtils.getBufferReaderByUrl(url, url.startsWith("https://"));
 
-			return currencyRates.get(to.name()) / currencyRates.get(from.name());
-		} catch (Exception e) {
-			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
-		}
-	}
+        try {
+            Map<String, Object> json = JsonHelper.parseObject(collected);
+            Map<String, Object> rates = JsonHelper.getObject(json, "rates");
+            double fromRate = JsonHelper.getDouble(rates, from.name());
+            double toRate = JsonHelper.getDouble(rates, to.name());
+            return toRate / fromRate;
+        } catch (Exception e) {
+            throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
+        }
+    }
 
-	private String getUrlString(String apiKey, Currency from, Currency to) {
-		return "https://openexchangerates.org/api/latest.json?app_id=" + apiKey + "&symbols=" + from + "," + to;
-	}
-	
+    private String getUrlString(String apiKey, Currency from, Currency to) {
+        return baseUrl + "/api/latest.json?app_id=" + apiKey + "&symbols=" + from + "," + to;
+    }
 }

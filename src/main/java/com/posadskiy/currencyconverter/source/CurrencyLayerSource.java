@@ -3,39 +3,43 @@ package com.posadskiy.currencyconverter.source;
 import com.posadskiy.currencyconverter.Messages;
 import com.posadskiy.currencyconverter.enums.Currency;
 import com.posadskiy.currencyconverter.exception.CurrencyConverterException;
+import com.posadskiy.currencyconverter.util.JsonHelper;
 import com.posadskiy.currencyconverter.util.NetworkUtils;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * CurrencyLayer.Com service
  */
 public class CurrencyLayerSource implements ConverterSource {
-	public static final String SERVICE_NAME = "CurrencyLayer.Com";
+    public static final String SERVICE_NAME = "CurrencyLayer.Com";
+    public static final String DEFAULT_BASE_URL = "https://api.apilayer.com";
 
-	@Override
-	public Double rate(String apiKey, Currency from, Currency to) throws IOException {
-		String collected = NetworkUtils.getBufferReaderByUrl(getUrlString(apiKey, from, to), true);
+    private final String baseUrl;
 
-		final String[] splitCurrencyInfo = collected.split("result\": ");
-		if (splitCurrencyInfo.length != 2) {
-			throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
-		}
+    public CurrencyLayerSource() {
+        this(DEFAULT_BASE_URL);
+    }
 
-		final String[] split = splitCurrencyInfo[1].split("}");
-        if (split.length != 1) {
-            throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
-        }
+    public CurrencyLayerSource(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    @Override
+    public Double rate(String apiKey, Currency from, Currency to) throws IOException {
+        String url = getUrlString(apiKey, from, to);
+        String collected = NetworkUtils.getBufferReaderByUrl(url, url.startsWith("https://"));
 
         try {
-            return Double.parseDouble(split[0]);
+            Map<String, Object> json = JsonHelper.parseObject(collected);
+            return JsonHelper.getDouble(json, "result");
         } catch (Exception e) {
             throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
         }
-	}
+    }
 
-	private String getUrlString(String apiKey, Currency from, Currency to) {
-        return "https://api.apilayer.com/currency_data/convert?apikey=" + apiKey + "&from=" + from + "&to=" + to + "&amount=1";
-	}
-
+    private String getUrlString(String apiKey, Currency from, Currency to) {
+        return baseUrl + "/currency_data/convert?apikey=" + apiKey + "&from=" + from + "&to=" + to + "&amount=1";
+    }
 }
