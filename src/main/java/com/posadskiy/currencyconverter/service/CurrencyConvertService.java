@@ -6,74 +6,84 @@ import com.posadskiy.currencyconverter.enums.Currency;
 import com.posadskiy.currencyconverter.exception.CurrencyConverterException;
 import com.posadskiy.currencyconverter.source.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CurrencyConvertService {
-	static Logger log = Logger.getLogger(CurrencyConvertService.class.getName());
-	public Double rate(Config config, Currency from, Currency to) {
-		if (from == to) return 1.0;
 
-		if (config.getCurrencyConverterApiApiKey() != null) {
-			CurrencyConverterApiSource currencyConverterApiSource = new CurrencyConverterApiSource();
-			try {
-				return currencyConverterApiSource.rate(config.getCurrencyConverterApiApiKey(), from, to);
-			} catch (CurrencyConverterException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				log.warning(Messages.getServiceProblemMessage(CurrencyConverterApiSource.SERVICE_NAME));
-				e.printStackTrace();
-			}
-		}
+    static final Logger log = Logger.getLogger(CurrencyConvertService.class.getName());
 
-		if (config.getCurrencyLayerApiKey() != null) {
-			CurrencyLayerSource currencyLayerSource = new CurrencyLayerSource();
-			try {
-				return currencyLayerSource.rate(config.getCurrencyLayerApiKey(), from, to);
-			} catch (CurrencyConverterException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				log.warning(Messages.getServiceProblemMessage(CurrencyLayerSource.SERVICE_NAME));
-				e.printStackTrace();
-			}
-		}
+    private final String sourceBaseUrl;
 
-		if (config.getOpenExchangeRatesApiKey() != null) {
-			OpenExchangeRatesSource openExchangeRatesSource = new OpenExchangeRatesSource();
-			try {
-				return openExchangeRatesSource.rate(config.getOpenExchangeRatesApiKey(), from, to);
-			} catch (CurrencyConverterException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				log.warning(Messages.getServiceProblemMessage(OpenExchangeRatesSource.SERVICE_NAME));
-				e.printStackTrace();
-			}
-		}
+    public CurrencyConvertService() {
+        this.sourceBaseUrl = null;
+    }
 
-		if (config.getFixerApiKey() != null) {
-			FixerSource fixerSource = new FixerSource();
-			try {
-				return fixerSource.rate(config.getFixerApiKey(), from, to);
-			} catch (CurrencyConverterException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				log.warning(Messages.getServiceProblemMessage(FixerSource.SERVICE_NAME));
-				e.printStackTrace();
-			}
-		}
+    /**
+     * Creates a service that directs all provider requests to the given base URL.
+     * Useful for testing or proxying through a custom endpoint.
+     */
+    public CurrencyConvertService(String sourceBaseUrl) {
+        this.sourceBaseUrl = sourceBaseUrl;
+    }
 
-		if (config.getCurrencyFreaksApiKey() != null) {
-			CurrencyFreaksSource currencyFreaksSource = new CurrencyFreaksSource();
-			try {
-				return currencyFreaksSource.rate(config.getCurrencyFreaksApiKey(), from, to);
-			} catch (CurrencyConverterException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				log.warning(Messages.getServiceProblemMessage(CurrencyFreaksSource.SERVICE_NAME));
-				e.printStackTrace();
-			}
-		}
+    public Double rate(Config config, Currency from, Currency to) {
+        if (from == to) return 1.0;
 
-		throw new CurrencyConverterException(Messages.TRY_LATER);
-	}
+        for (SourceEntry entry : buildEntries(config)) {
+            try {
+                return entry.source.rate(entry.apiKey, from, to);
+            } catch (CurrencyConverterException e) {
+                log.warning(e.getMessage());
+            } catch (Exception e) {
+                log.log(Level.WARNING, Messages.getServiceProblemMessage(entry.name), e);
+            }
+        }
 
+        throw new CurrencyConverterException(Messages.TRY_LATER);
+    }
+
+    List<SourceEntry> buildEntries(Config config) {
+        List<SourceEntry> entries = new ArrayList<>();
+        if (config.getCurrencyConverterApiApiKey() != null) {
+            entries.add(new SourceEntry(CurrencyConverterApiSource.SERVICE_NAME,
+                sourceBaseUrl != null ? new CurrencyConverterApiSource(sourceBaseUrl) : new CurrencyConverterApiSource(),
+                config.getCurrencyConverterApiApiKey()));
+        }
+        if (config.getCurrencyLayerApiKey() != null) {
+            entries.add(new SourceEntry(CurrencyLayerSource.SERVICE_NAME,
+                sourceBaseUrl != null ? new CurrencyLayerSource(sourceBaseUrl) : new CurrencyLayerSource(),
+                config.getCurrencyLayerApiKey()));
+        }
+        if (config.getOpenExchangeRatesApiKey() != null) {
+            entries.add(new SourceEntry(OpenExchangeRatesSource.SERVICE_NAME,
+                sourceBaseUrl != null ? new OpenExchangeRatesSource(sourceBaseUrl) : new OpenExchangeRatesSource(),
+                config.getOpenExchangeRatesApiKey()));
+        }
+        if (config.getFixerApiKey() != null) {
+            entries.add(new SourceEntry(FixerSource.SERVICE_NAME,
+                sourceBaseUrl != null ? new FixerSource(sourceBaseUrl) : new FixerSource(),
+                config.getFixerApiKey()));
+        }
+        if (config.getCurrencyFreaksApiKey() != null) {
+            entries.add(new SourceEntry(CurrencyFreaksSource.SERVICE_NAME,
+                sourceBaseUrl != null ? new CurrencyFreaksSource(sourceBaseUrl) : new CurrencyFreaksSource(),
+                config.getCurrencyFreaksApiKey()));
+        }
+        return entries;
+    }
+
+    static final class SourceEntry {
+        final String name;
+        final ConverterSource source;
+        final String apiKey;
+
+        SourceEntry(String name, ConverterSource source, String apiKey) {
+            this.name = name;
+            this.source = source;
+            this.apiKey = apiKey;
+        }
+    }
 }
